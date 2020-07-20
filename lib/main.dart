@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pruebaexamen/actividades/contenido.dart';
+import 'package:pruebaexamen/actividades/splashScreen.dart';
 import 'package:pruebaexamen/preferencias/shared_preferences.dart';
 import 'package:toast/toast.dart';
 import 'package:pruebaexamen/models/usuario.dart';
@@ -19,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MyHomePage(),  //aqui mnando a llamar el splash activity
+      home: Splashscreen(),  //aqui mnando a llamar el splash activity
     );
   }
 }
@@ -79,6 +81,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 RaisedButton(
                   child: Text("Agregar usuario"),
+                  color: Colors.lightBlueAccent,
+                  shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(30.0)  //el boton redondo
+                  ),
                   onPressed: (){
                     if(ap_paterno.text != "" && ap_materno.text != "" && nombre.text != ""
                     && password.text != "" && telefono.text != "" && correo.text != ""
@@ -96,13 +102,16 @@ class _MyHomePageState extends State<MyHomePage> {
                       );
                       addUser(usuario).then((value){
                         print(value.body);
-                        Toast.show("Usuario agregado exitosamente", context, duration: Toast.LENGTH_SHORT);
-
+                        Toast.show("Usuario agregado exitosamente", context, duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => Login()));
                       }).catchError((onError){
                         print(onError);
                       });
                     }else{
-                      Toast.show("Debes llenar todos los campos", context, duration: Toast.LENGTH_SHORT);
+
+                      Toast.show("Debes llenar todos los campos", context, duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
 
                     }
                   },

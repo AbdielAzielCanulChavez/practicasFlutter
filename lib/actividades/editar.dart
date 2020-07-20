@@ -19,6 +19,7 @@ class Editar extends StatefulWidget {
 
   @override
   _EditarState createState() => _EditarState();
+
 }
 
 Future<List<Categoriaproducto>> categoriaProductos;
@@ -91,6 +92,7 @@ class _EditarState extends State<Editar> {
                 _categoriaproducto(),
 
                 RaisedButton(
+                  child: Text("Guardar cambios"),  //aqui puede haber un error
                     onPressed: (){
                       if(descripcionUpdate.text != "" && nombreUpdate.text != "" && precioUpdate.text != "" ){
 
@@ -106,12 +108,12 @@ class _EditarState extends State<Editar> {
                         editarProducto(productos).then((value){
                           print(value.body);
                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Contenido()));
-                          Toast.show("Producto actualizado", context, duration: Toast.LENGTH_SHORT);
+                          Toast.show("Producto actualizado", context, duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
                         }).catchError((onError){
                           print(onError);
                         });
                       }else{
-                        Toast.show("Debes de llenar todos los campos", context, duration: Toast.LENGTH_SHORT);
+                        Toast.show("Debes de llenar todos los campos", context, duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
                       }
                     }
                     )

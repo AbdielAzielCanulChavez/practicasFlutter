@@ -88,12 +88,12 @@ class _AgregarproductoState extends State<Agregarproducto> {
                          addProducto(productos).then((value){
                            print(value.body);
                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Contenido()));
-                           Toast.show("producto agregado correctamente", context, duration: Toast.LENGTH_SHORT);
+                           Toast.show("producto agregado correctamente", context, duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
                          }).catchError((onError){
                            print(onError);
                          });
                         }else{
-                        Toast.show("Debes de llenar todos los campos", context, duration: Toast.LENGTH_SHORT);
+                        Toast.show("Debes de llenar todos los campos", context, duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
                       }
                       },
                     ),

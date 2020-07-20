@@ -1,17 +1,28 @@
 import 'package:pruebaexamen/actividades/agregar.dart';
 import 'package:pruebaexamen/actividades/editar.dart';
 import 'package:flutter/material.dart';
+import 'package:pruebaexamen/preferencias/shared_preferences.dart';
 import 'package:pruebaexamen/actividades/mostrarcontenidoporid.dart';
+import 'package:pruebaexamen/models/categoriaproducto.dart';
 import 'package:pruebaexamen/models/productos.dart';
+import 'package:pruebaexamen/providers/api_categoriaproductos.dart';
 import 'package:pruebaexamen/providers/api_productos.dart';
+
 
 
 List <Productos> productoLista = new List<Productos>();
 bool banderaProductos = false;
 class Contenido extends StatefulWidget {
+
+  Contenido({Key key,this.producto, this.categoriaproducto}); //esto puede tener error
+  Categoriaproducto categoriaproducto; //esto puede tener error
+  Productos producto; //esto puede tener error
   @override
   _ContenidoState createState() => _ContenidoState();
 }
+
+Future<List<Categoriaproducto>> categoriaProductos; //esto puede tener error
+Categoriaproducto _currentCategoria;  //esto puede tener error
 
 class _ContenidoState extends State<Contenido> {
   
@@ -20,6 +31,7 @@ class _ContenidoState extends State<Contenido> {
     // TODO: implement initState
     super.initState();
     print("hola");
+    obtenerCategoria();
    obtenerProductos();
   }
   
@@ -42,13 +54,30 @@ class _ContenidoState extends State<Contenido> {
     }
     
   }
+
+
+  //esto puede tener error
+  obtenerCategoria(){
+
+    categoriaProductos = getCategoriaProductos();
+
+    categoriaProductos.then((value) {
+      for(int i = 0; i<value.length; i++) {
+        if(value[i].id == widget.producto.categoriaProductoId) {
+          _currentCategoria = value[i];
+        }
+      }
+    });
+
+  }
+  //esto puede tener error
   
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Crud lista de ${pref.nombre}"),
+        title: Text("Crud lista del usuario"), //aqui se le agrega ${pref.nombre}
         actions: <Widget>[
           GestureDetector(
               onTap: () {
@@ -74,7 +103,7 @@ class _ContenidoState extends State<Contenido> {
           } else if (snapshot.connectionState == ConnectionState.done) {
             var response = snapshot.data as List<Productos>;
             return  banderaProductos? ListView.builder(
-              
+
               itemCount: response.length,
               itemBuilder: (context, position) {
                 var productosItem = response[position];
@@ -84,6 +113,31 @@ class _ContenidoState extends State<Contenido> {
 
                   },
                   onTap: () {
+
+                    //esto puede tener error
+                    AlertDialog(
+                      title: Text('Producto'),
+                      content: SingleChildScrollView(
+                        child: ListBody(
+                          children: <Widget>[
+                            Text('Nombre producto: ${productosItem.nombre}'),
+                            Text('Descripcion del producto: ${productosItem.descripcion}'),
+                            Text('Precio del producto: ${productosItem.precio}'),
+                            Text('Categoria del producto: ${_currentCategoria.descripcion}'),
+
+                          ],
+                        ),
+                      ),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text('Cerrar'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                    //aqui puede tener error
 
                   },
                   child: Padding(
@@ -95,12 +149,10 @@ class _ContenidoState extends State<Contenido> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
-                            Text(
 
-                              productosItem.descripcion,
-                              style: Theme.of(context).textTheme.subtitle1,
+                            Text(productosItem.nombre, style: Theme.of(context).textTheme.title,),
+                            Text(productosItem.descripcion,style: Theme.of(context).textTheme.subtitle1,),
 
-                            ),
                             ButtonBar(
                               children: <Widget>[
                                 FlatButton(onPressed: (){
@@ -109,13 +161,13 @@ class _ContenidoState extends State<Contenido> {
                                         return Editar(producto: productosItem); //aqui van los valores de editar
                                       }));
                                 },
-                                    child: Icon(Icons.edit)),
+                                    child: Icon(Icons.edit, color: Colors.green,)),
                                 FlatButton(onPressed: (){
                                   eliminarProducto(productosItem);
                                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Contenido()));
 
                                 },
-                                    child: Icon(Icons.delete_forever))
+                                    child: Icon(Icons.delete_forever, color: Colors.red,))
                               ],
                             )
                           ],
@@ -125,7 +177,9 @@ class _ContenidoState extends State<Contenido> {
                   ),
                 );
               },
-            ):Text("No hay productos");
+            ):Center(// esto puede tener error
+              child: Text("No hay datos"),  //si tiene error pones :Text("No hay productos");
+            );
             return Center(child: Text("Success"));
           } else {
             return Center(child: CircularProgressIndicator());

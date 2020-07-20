@@ -39,7 +39,12 @@ class _LoginState extends State<Login> {
                   _correo(),
                   _pass(),
                   RaisedButton(
+
                     child: Text("Loguearme"),
+                    color: Colors.lightBlueAccent,
+                    shape: new RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(30.0)  //el boton redondo
+                    ),
                     onPressed: (){
                       if(correo.text != "" && passsword.text != ""){
                         login(correo.text, passsword.text).then((value){
@@ -57,20 +62,21 @@ class _LoginState extends State<Login> {
                                 context,
                                 MaterialPageRoute(builder: (context) => Contenido()));
                           }else{
-                            Toast.show("Correo o contrasenia erroneas", context, duration: Toast.LENGTH_SHORT);
+                            Toast.show("Correo o contrasenia erroneas", context, duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
                           }
                         });
                       }else{
-                        Toast.show("Debes llenar todos los campos", context, duration: Toast.LENGTH_SHORT);
+                        Toast.show("Debes llenar todos los campos", context, duration: Toast.LENGTH_SHORT, gravity: Toast.CENTER);
                       }
                     },
                   ),
                   GestureDetector(
-                    child: Text("Registrarme"),
+                    child: Text("Registrarme", style: TextStyle(color: Colors.grey),),
+
                     onTap: (){
                       Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => MyApp()),
+                          MaterialPageRoute(builder: (context) => MyHomePage()),
                       );
                     },
                   )
@@ -94,6 +100,7 @@ class _LoginState extends State<Login> {
           fontSize: 16,
         ),
         decoration: InputDecoration(
+          icon: Icon(Icons.email, color: Colors.black,),
           filled: true,
           fillColor: Color.fromRGBO(255, 255, 255, 1),
           border: OutlineInputBorder(
@@ -128,6 +135,7 @@ class _LoginState extends State<Login> {
       child:TextFormField(
 
         keyboardType: TextInputType.text,
+        obscureText: true, //este sirve para ocultar el texto del password
         controller: passsword,
         style: TextStyle(
           fontWeight: FontWeight.w600,
@@ -135,6 +143,7 @@ class _LoginState extends State<Login> {
           fontSize: 16,
         ),
         decoration: InputDecoration(
+          icon: Icon(Icons.vpn_key, color: Colors.black,),
           filled: true,
           fillColor: Color.fromRGBO(255, 255, 255, 1),
           border: OutlineInputBorder(
@@ -152,7 +161,9 @@ class _LoginState extends State<Login> {
             borderSide: BorderSide(color: Color.fromRGBO(190, 190, 190, 1)),
           ),
           contentPadding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+
           hintText: "Contrasenia",
+
           hintStyle: TextStyle(
             fontWeight: FontWeight.w600,
             color: Colors.black38,
